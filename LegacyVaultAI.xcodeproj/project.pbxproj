@@ -1,0 +1,592 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF0000000000000000000001 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000001 /* RootView.swift */; };
+		BF0000000000000000000002 /* LegacyVaultAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000002 /* LegacyVaultAIApp.swift */; };
+		BF0000000000000000000003 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000003 /* AppTheme.swift */; };
+		BF0000000000000000000004 /* PremiumComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000004 /* PremiumComponents.swift */; };
+		BF0000000000000000000005 /* LegacyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000005 /* LegacyModels.swift */; };
+		BF0000000000000000000006 /* HumanAssetPlaceholders.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000006 /* HumanAssetPlaceholders.swift */; };
+		BF0000000000000000000007 /* VoiceServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000007 /* VoiceServices.swift */; };
+		BF0000000000000000000008 /* EstateAIServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000008 /* EstateAIServices.swift */; };
+		BF0000000000000000000009 /* CoreServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000009 /* CoreServices.swift */; };
+		BF000000000000000000000A /* LegacyVaultWatchPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000A /* LegacyVaultWatchPlaceholder.swift */; };
+		BF000000000000000000000B /* VoiceLegacyRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000B /* VoiceLegacyRecorderView.swift */; };
+		BF000000000000000000000C /* SecurityServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000C /* SecurityServices.swift */; };
+		BF000000000000000000000D /* SecureVaultArchitecture.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000D /* SecureVaultArchitecture.swift */; };
+		BF000000000000000000000E /* DigitalLegacyVaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000E /* DigitalLegacyVaultView.swift */; };
+		BF000000000000000000000F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR000000000000000000000F /* OnboardingView.swift */; };
+		BF0000000000000000000010 /* BeneficiaryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000010 /* BeneficiaryManagementView.swift */; };
+		BF0000000000000000000011 /* AssetInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000011 /* AssetInventoryView.swift */; };
+		BF0000000000000000000012 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000012 /* SettingsView.swift */; };
+		BF0000000000000000000013 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000013 /* DashboardView.swift */; };
+		BF0000000000000000000014 /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000014 /* ViewModels.swift */; };
+		BF0000000000000000000015 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000015 /* PaywallView.swift */; };
+		BF0000000000000000000016 /* LegacyVaultWidgetPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000016 /* LegacyVaultWidgetPlaceholder.swift */; };
+		BF0000000000000000000017 /* PlanningViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000017 /* PlanningViews.swift */; };
+		BF0000000000000000000018 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FR0000000000000000000018 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		FR0000000000000000000001 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000002 /* LegacyVaultAIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVaultAIApp.swift; sourceTree = "<group>"; };
+		FR0000000000000000000003 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		FR0000000000000000000004 /* PremiumComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumComponents.swift; sourceTree = "<group>"; };
+		FR0000000000000000000005 /* LegacyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyModels.swift; sourceTree = "<group>"; };
+		FR0000000000000000000006 /* HumanAssetPlaceholders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanAssetPlaceholders.swift; sourceTree = "<group>"; };
+		FR0000000000000000000007 /* VoiceServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceServices.swift; sourceTree = "<group>"; };
+		FR0000000000000000000008 /* EstateAIServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EstateAIServices.swift; sourceTree = "<group>"; };
+		FR0000000000000000000009 /* CoreServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreServices.swift; sourceTree = "<group>"; };
+		FR000000000000000000000A /* LegacyVaultWatchPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVaultWatchPlaceholder.swift; sourceTree = "<group>"; };
+		FR000000000000000000000B /* VoiceLegacyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceLegacyRecorderView.swift; sourceTree = "<group>"; };
+		FR000000000000000000000C /* SecurityServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityServices.swift; sourceTree = "<group>"; };
+		FR000000000000000000000D /* SecureVaultArchitecture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureVaultArchitecture.swift; sourceTree = "<group>"; };
+		FR000000000000000000000E /* DigitalLegacyVaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalLegacyVaultView.swift; sourceTree = "<group>"; };
+		FR000000000000000000000F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000010 /* BeneficiaryManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeneficiaryManagementView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000011 /* AssetInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetInventoryView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000012 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000013 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000014 /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
+		FR0000000000000000000015 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		FR0000000000000000000016 /* LegacyVaultWidgetPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyVaultWidgetPlaceholder.swift; sourceTree = "<group>"; };
+		FR0000000000000000000017 /* PlanningViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanningViews.swift; sourceTree = "<group>"; };
+		FR0000000000000000000018 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FR0000000000000000000019 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FR000000000000000000001A /* LegacyVaultAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LegacyVaultAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		PH0000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		GR0000000000000000000000 = {
+			isa = PBXGroup;
+			children = (
+				GR0000000000000000000001 /* LegacyVaultAI */,
+				GR0000000000000000000002 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000001 /* LegacyVaultAI */ = {
+			isa = PBXGroup;
+			children = (
+				GR0000000000000000000003 /* App */,
+				GR0000000000000000000004 /* Models */,
+				GR0000000000000000000005 /* ViewModels */,
+				GR0000000000000000000006 /* Views */,
+				GR0000000000000000000007 /* Services */,
+				GR0000000000000000000008 /* Components */,
+				GR0000000000000000000009 /* Voice */,
+				GR000000000000000000000A /* Security */,
+				GR000000000000000000000B /* VaultPlaceholder */,
+				GR000000000000000000000C /* WidgetsPlaceholder */,
+				GR000000000000000000000D /* WatchPlaceholder */,
+				GR000000000000000000000E /* HumanAssetsPlaceholder */,
+				GR000000000000000000000F /* Resources */,
+			);
+			path = LegacyVaultAI;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000002 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000001A /* LegacyVaultAI.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000003 /* AppTheme.swift */,
+				FR0000000000000000000002 /* LegacyVaultAIApp.swift */,
+				FR0000000000000000000001 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000005 /* LegacyModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000014 /* ViewModels.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				GR0000000000000000000010 /* Onboarding */,
+				GR0000000000000000000011 /* Dashboard */,
+				GR0000000000000000000012 /* Assets */,
+				GR0000000000000000000013 /* Beneficiaries */,
+				GR0000000000000000000014 /* Vault */,
+				GR0000000000000000000015 /* Voice */,
+				GR0000000000000000000016 /* Planning */,
+				GR0000000000000000000017 /* Paywall */,
+				GR0000000000000000000018 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000007 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000009 /* CoreServices.swift */,
+				FR0000000000000000000008 /* EstateAIServices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000008 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000004 /* PremiumComponents.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000009 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000007 /* VoiceServices.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000A /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000C /* SecurityServices.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000B /* VaultPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000D /* SecureVaultArchitecture.swift */,
+			);
+			path = VaultPlaceholder;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000C /* WidgetsPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000016 /* LegacyVaultWidgetPlaceholder.swift */,
+			);
+			path = WidgetsPlaceholder;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000D /* WatchPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000A /* LegacyVaultWatchPlaceholder.swift */,
+			);
+			path = WatchPlaceholder;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000E /* HumanAssetsPlaceholder */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000006 /* HumanAssetPlaceholders.swift */,
+			);
+			path = HumanAssetsPlaceholder;
+			sourceTree = "<group>";
+		};
+		GR000000000000000000000F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000018 /* Assets.xcassets */,
+				FR0000000000000000000019 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000010 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000F /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000011 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000013 /* DashboardView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000012 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000011 /* AssetInventoryView.swift */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000013 /* Beneficiaries */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000010 /* BeneficiaryManagementView.swift */,
+			);
+			path = Beneficiaries;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000014 /* Vault */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000E /* DigitalLegacyVaultView.swift */,
+			);
+			path = Vault;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000015 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				FR000000000000000000000B /* VoiceLegacyRecorderView.swift */,
+			);
+			path = Voice;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000016 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000017 /* PlanningViews.swift */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000017 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000015 /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		GR0000000000000000000018 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FR0000000000000000000012 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		TG0000000000000000000001 /* LegacyVaultAI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL0000000000000000000002 /* Build configuration list for PBXNativeTarget "LegacyVaultAI" */;
+			buildPhases = (
+				PH0000000000000000000001 /* Sources */,
+				PH0000000000000000000003 /* Frameworks */,
+				PH0000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LegacyVaultAI;
+			productName = LegacyVaultAI;
+			productReference = FR000000000000000000001A /* LegacyVaultAI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		PJ0000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					TG0000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = CL0000000000000000000001 /* Build configuration list for PBXProject "LegacyVaultAI" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = GR0000000000000000000000;
+			productRefGroup = GR0000000000000000000002 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				TG0000000000000000000001 /* LegacyVaultAI */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		PH0000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF0000000000000000000018 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		PH0000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF0000000000000000000003 /* AppTheme.swift in Sources */,
+				BF0000000000000000000002 /* LegacyVaultAIApp.swift in Sources */,
+				BF0000000000000000000001 /* RootView.swift in Sources */,
+				BF0000000000000000000005 /* LegacyModels.swift in Sources */,
+				BF0000000000000000000014 /* ViewModels.swift in Sources */,
+				BF0000000000000000000004 /* PremiumComponents.swift in Sources */,
+				BF0000000000000000000009 /* CoreServices.swift in Sources */,
+				BF0000000000000000000008 /* EstateAIServices.swift in Sources */,
+				BF0000000000000000000007 /* VoiceServices.swift in Sources */,
+				BF000000000000000000000C /* SecurityServices.swift in Sources */,
+				BF000000000000000000000D /* SecureVaultArchitecture.swift in Sources */,
+				BF0000000000000000000016 /* LegacyVaultWidgetPlaceholder.swift in Sources */,
+				BF000000000000000000000A /* LegacyVaultWatchPlaceholder.swift in Sources */,
+				BF0000000000000000000006 /* HumanAssetPlaceholders.swift in Sources */,
+				BF000000000000000000000F /* OnboardingView.swift in Sources */,
+				BF0000000000000000000013 /* DashboardView.swift in Sources */,
+				BF0000000000000000000011 /* AssetInventoryView.swift in Sources */,
+				BF0000000000000000000010 /* BeneficiaryManagementView.swift in Sources */,
+				BF000000000000000000000E /* DigitalLegacyVaultView.swift in Sources */,
+				BF000000000000000000000B /* VoiceLegacyRecorderView.swift in Sources */,
+				BF0000000000000000000017 /* PlanningViews.swift in Sources */,
+				BF0000000000000000000015 /* PaywallView.swift in Sources */,
+				BF0000000000000000000012 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CF0000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CF0000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		CF0000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LegacyVaultAI/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legacyvaultai.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CF0000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = LegacyVaultAI/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.legacyvaultai.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CL0000000000000000000001 /* Build configuration list for PBXProject "LegacyVaultAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF0000000000000000000001 /* Debug */,
+				CF0000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CL0000000000000000000002 /* Build configuration list for PBXNativeTarget "LegacyVaultAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF0000000000000000000003 /* Debug */,
+				CF0000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = PJ0000000000000000000001 /* Project object */;
+}
