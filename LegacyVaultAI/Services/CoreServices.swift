@@ -210,7 +210,9 @@ final class SubscriptionService: ObservableObject {
                 return
             }
         }
-        displayState = DisplayState(plan: "Free", isActive: false)
+        if displayState.isActive == false {
+            displayState = DisplayState(plan: "Free", isActive: false)
+        }
     }
 
     func activateMockPlan(_ plan: String) {
@@ -331,4 +333,312 @@ struct ShareSheet: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+@MainActor
+enum DemoDataSeeder {
+    static let isEnabled = true
+
+    static func seedIfNeeded(existingProfiles: [UserProfile], in context: ModelContext) -> String? {
+        guard isEnabled, existingProfiles.isEmpty else { return nil }
+
+        let profile = UserProfile(
+            maritalStatus: "Married",
+            dependents: 2,
+            ownsHome: true,
+            ownsBusiness: true,
+            hasDigitalAssets: true,
+            planningGoals: "Protect family, Organize assets, Prepare executor, Digital legacy, Preserve stories"
+        )
+
+        let assets = [
+            Asset(
+                title: "Harper family home",
+                assetType: "Property",
+                estimatedValue: 875_000,
+                owner: "Olivia and James Harper",
+                notes: "Mortgage documents and title reference are stored with the solicitor. Annual insurance review due each September.",
+                location: "Richmond, London",
+                supportingDocuments: "Property deed, mortgage statement, buildings insurance"
+            ),
+            Asset(
+                title: "Family emergency fund",
+                assetType: "Bank account",
+                estimatedValue: 64_500,
+                owner: "Olivia Harper",
+                notes: "Executor should contact the private banking relationship manager listed in the document vault.",
+                location: "Secure banking portal",
+                supportingDocuments: "Latest bank statement"
+            ),
+            Asset(
+                title: "Harper & Co. design studio",
+                assetType: "Business",
+                estimatedValue: 245_000,
+                owner: "James Harper",
+                notes: "Succession note: Maya Grant can operate payroll and client handover in an emergency.",
+                location: "Companies House and studio safe",
+                supportingDocuments: "Share certificate, accountant contact, insurance"
+            ),
+            Asset(
+                title: "Long-term investment portfolio",
+                assetType: "Investment",
+                estimatedValue: 318_400,
+                owner: "Joint",
+                notes: "Allocation reviewed with adviser each January. Beneficiary notes are organizational only.",
+                location: "Wealth platform",
+                supportingDocuments: "Portfolio statement"
+            ),
+            Asset(
+                title: "Pension plans",
+                assetType: "Pension",
+                estimatedValue: 402_000,
+                owner: "Olivia and James Harper",
+                notes: "Nomination forms need professional review after any major family change.",
+                location: "Provider portals",
+                supportingDocuments: "Pension summaries"
+            ),
+            Asset(
+                title: "Digital wallet placeholder",
+                assetType: "Crypto placeholder",
+                estimatedValue: 12_500,
+                owner: "James Harper",
+                notes: "Recovery phrase location is not stored in plain text. Executor should contact appointed adviser.",
+                location: "Secure offline storage",
+                supportingDocuments: "Wallet inventory note"
+            )
+        ]
+
+        let beneficiaries = [
+            Beneficiary(
+                name: "Sofia Harper",
+                relationship: "Daughter",
+                contactInfo: "Care of Olivia and James Harper",
+                allocationNote: "Education and long-term care priority placeholder",
+                notes: "Guardian plan includes school continuity and family travel preferences."
+            ),
+            Beneficiary(
+                name: "Leo Harper",
+                relationship: "Son",
+                contactInfo: "Care of Olivia and James Harper",
+                allocationNote: "Education and wellbeing priority placeholder",
+                notes: "Include notes about therapy provider, routines, and grandparents."
+            ),
+            Beneficiary(
+                name: "Amara Reed",
+                relationship: "Sister",
+                contactInfo: "amara.reed@example.com | +44 7700 900123",
+                allocationNote: "Sentimental items and family archive custodian placeholder",
+                notes: "Trusted family contact for letters, photos, and personal messages."
+            )
+        ]
+
+        let executors = [
+            Executor(
+                name: "Amara Reed",
+                contactInfo: "amara.reed@example.com | +44 7700 900123",
+                responsibilities: "Contact solicitor, secure home documents, support children's guardians, and coordinate family communications.",
+                notes: "Primary family executor. Confirm legal appointment with solicitor.",
+                isPrimary: true
+            ),
+            Executor(
+                name: "Maya Grant",
+                contactInfo: "maya.grant@example.com | +44 7700 900456",
+                responsibilities: "Business continuity, payroll, vendor handover, and accountant coordination.",
+                notes: "Business continuity contact, not a substitute for legal advice.",
+                isPrimary: false
+            )
+        ]
+
+        let digitalAssets = [
+            DigitalAsset(
+                accountName: "Primary email and cloud drive",
+                accountType: "Cloud storage",
+                notes: "Contains family photo archive, scanned insurance records, and household manuals.",
+                instructions: "Emergency access should follow provider policy and solicitor guidance.",
+                emergencyContact: "Amara Reed"
+            ),
+            DigitalAsset(
+                accountName: "Family subscription hub",
+                accountType: "Subscription",
+                notes: "Music, streaming, children's apps, password manager family plan.",
+                instructions: "Cancel non-essential subscriptions after household review.",
+                emergencyContact: "James Harper's accountant"
+            ),
+            DigitalAsset(
+                accountName: "harperandco.studio",
+                accountType: "Domain",
+                notes: "Business domain and client landing pages.",
+                instructions: "Renew domain for at least 24 months during business transition.",
+                emergencyContact: "Maya Grant"
+            ),
+            DigitalAsset(
+                accountName: "Design studio social accounts",
+                accountType: "Social media",
+                notes: "Instagram, LinkedIn, and portfolio channels.",
+                instructions: "Pause scheduled posts and publish continuity notice only after adviser review.",
+                emergencyContact: "Maya Grant"
+            ),
+            DigitalAsset(
+                accountName: "Cold storage inventory",
+                accountType: "Crypto wallet placeholder",
+                notes: "No seed phrase stored in the app. Location instructions are held offline.",
+                instructions: "Executor should not attempt transfers without qualified specialist support.",
+                emergencyContact: "Private wealth adviser"
+            )
+        ]
+
+        let guardianPlans = [
+            GuardianPlan(
+                guardianName: "Amara Reed",
+                backupGuardianName: "Nadia Cole",
+                contactInfo: "Amara Reed, amara.reed@example.com",
+                careInstructions: "Keep Sofia and Leo together, maintain school continuity, and preserve weekly calls with grandparents.",
+                educationNotes: "Both children thrive with music, outdoor time, and predictable routines.",
+                familyWishes: "Prioritize emotional stability, sibling connection, and access to family history."
+            )
+        ]
+
+        let finalWishes = [
+            FinalWishesPlan(
+                ceremonyWishes: "Small ceremony with close family, acoustic music, and letters read privately.",
+                dispositionPreference: "Cremation",
+                charitableDonations: "Family may support children's literacy and mental health charities.",
+                personalInstructions: "Keep the tone warm, simple, and family-centered. No expensive formalities are expected."
+            )
+        ]
+
+        let timelineEvents = [
+            LegacyTimelineEvent(
+                title: "Olivia and James wedding",
+                eventDate: Calendar.current.date(from: DateComponents(year: 2014, month: 6, day: 21)) ?? .now,
+                notes: "A summer garden ceremony that became the family story everyone still tells."
+            ),
+            LegacyTimelineEvent(
+                title: "Sofia was born",
+                eventDate: Calendar.current.date(from: DateComponents(year: 2017, month: 9, day: 12)) ?? .now,
+                notes: "The moment the family's priorities changed from ambition to protection."
+            ),
+            LegacyTimelineEvent(
+                title: "Harper & Co. launched",
+                eventDate: Calendar.current.date(from: DateComponents(year: 2020, month: 2, day: 3)) ?? .now,
+                notes: "Started from the kitchen table and became a studio with seven clients in year one."
+            )
+        ]
+
+        let familyLegacyItems = [
+            FamilyLegacyItem(
+                title: "Letter for Sofia at 18",
+                itemType: "Future message",
+                message: "A note about courage, kindness, and choosing friends who make life feel lighter.",
+                recipient: "Sofia Harper",
+                deliveryNote: "Share on Sofia's eighteenth birthday."
+            ),
+            FamilyLegacyItem(
+                title: "Grandparents' recipes",
+                itemType: "Family history",
+                message: "Sunday sauce, lemon cake, and the handwritten notes from Nana Reed.",
+                recipient: "Sofia and Leo Harper",
+                deliveryNote: "Keep with the family photo archive."
+            ),
+            FamilyLegacyItem(
+                title: "Audio message for Leo",
+                itemType: "Audio message",
+                message: "A short message about curiosity, football Saturdays, and being gentle with himself.",
+                recipient: "Leo Harper",
+                deliveryNote: "Share when he asks about family memories."
+            )
+        ]
+
+        let documents = [
+            DocumentRecord(
+                title: "Will location note",
+                documentType: "Will placeholder",
+                storageLocation: "Solicitor vault and home fire safe",
+                reviewStatus: "Needs qualified legal review after 2026 updates",
+                notes: "LegacyVault AI does not create or validate this document.",
+                isEncryptedPlaceholder: true
+            ),
+            DocumentRecord(
+                title: "Life insurance policy",
+                documentType: "Insurance document",
+                storageLocation: "Document vault and provider portal",
+                reviewStatus: "Reviewed January 2026",
+                notes: "Check beneficiary nomination annually.",
+                isEncryptedPlaceholder: true
+            ),
+            DocumentRecord(
+                title: "Property deed reference",
+                documentType: "Property document",
+                storageLocation: "Solicitor file reference HV-2214",
+                reviewStatus: "Location verified",
+                notes: "Executor should request certified copies if needed.",
+                isEncryptedPlaceholder: true
+            ),
+            DocumentRecord(
+                title: "Passports and IDs",
+                documentType: "Identification",
+                storageLocation: "Home fire safe",
+                reviewStatus: "Current",
+                notes: "Copies are for organization only.",
+                isEncryptedPlaceholder: true
+            )
+        ]
+
+        let recordings = [
+            VoiceLegacyRecording(
+                title: "Personal wishes for the children",
+                transcript: "If something happened tomorrow, I want Sofia and Leo to know they were loved beyond measure. Keep them together, keep routines steady, and let them hear our stories often.",
+                summary: "A warm message centered on stability, sibling connection, and preserving family stories.",
+                familyNotes: "Share with Amara and the children when the family needs emotional context.",
+                executorInstructions: "Use as personal context only. Formal decisions should follow valid documents and qualified professional guidance.",
+                audioFileName: "legacy-voice-demo-children.m4a",
+                durationSeconds: 84
+            ),
+            VoiceLegacyRecording(
+                title: "Executor business context",
+                transcript: "Maya knows the studio operations best. The priority is paying staff, pausing new work, and communicating clearly with clients.",
+                summary: "Business continuity guidance for the design studio.",
+                familyNotes: "Preserve the business only if it supports the family's wellbeing.",
+                executorInstructions: "Contact Maya and the accountant before making business decisions.",
+                audioFileName: "legacy-voice-demo-business.m4a",
+                durationSeconds: 52
+            )
+        ]
+
+        let review = EstateReview(
+            readinessScore: 88,
+            recommendations: [
+                "Schedule a qualified legal review for the will and guardian preferences.",
+                "Add updated pension nomination confirmation.",
+                "Review digital access instructions annually.",
+                LegalDisclaimer.short
+            ].joined(separator: "\n"),
+            missingItems: "Professional legal review date, updated pension nomination confirmation",
+            summary: "The Harper family profile is substantially organized with strong beneficiary, document, executor, and digital legacy coverage.",
+            estateInsights: "Family Office demo profile. Educational organization only. Jurisdiction-specific professional advice remains required."
+        )
+
+        let subscription = SubscriptionState(
+            plan: "Family Office",
+            isActive: true,
+            renewalDate: Calendar.current.date(byAdding: .month, value: 1, to: .now)
+        )
+
+        context.insert(profile)
+        context.insert(subscription)
+        assets.forEach { context.insert($0) }
+        beneficiaries.forEach { context.insert($0) }
+        executors.forEach { context.insert($0) }
+        digitalAssets.forEach { context.insert($0) }
+        guardianPlans.forEach { context.insert($0) }
+        finalWishes.forEach { context.insert($0) }
+        timelineEvents.forEach { context.insert($0) }
+        familyLegacyItems.forEach { context.insert($0) }
+        documents.forEach { context.insert($0) }
+        recordings.forEach { context.insert($0) }
+        context.insert(review)
+
+        try? context.save()
+        return subscription.plan
+    }
 }

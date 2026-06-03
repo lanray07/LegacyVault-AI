@@ -48,13 +48,29 @@ enum AppRoute: Hashable {
 }
 
 struct RootView: View {
+    @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var subscriptionService: SubscriptionService
     @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
+    @Query(sort: \SubscriptionState.createdAt, order: .reverse) private var subscriptionStates: [SubscriptionState]
 
     var body: some View {
-        if let profile = profiles.first {
-            AppShellView(profile: profile)
-        } else {
-            OnboardingView()
+        Group {
+            if let profile = profiles.first {
+                AppShellView(profile: profile)
+            } else {
+                OnboardingView()
+            }
+        }
+        .task {
+            let seededPlan = DemoDataSeeder.seedIfNeeded(existingProfiles: profiles, in: modelContext)
+            if let plan = seededPlan ?? subscriptionStates.first?.plan {
+                subscriptionService.activateMockPlan(plan)
+            }
+        }
+        .onChange(of: subscriptionStates.map(\.plan)) { _, plans in
+            if let plan = plans.first {
+                subscriptionService.activateMockPlan(plan)
+            }
         }
     }
 }
