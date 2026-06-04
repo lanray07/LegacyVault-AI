@@ -7,6 +7,7 @@ on:
     paths:
       - ".github/workflows/app-store-app-info.yml"
       - "LegacyVaultAI/Resources/Info.plist"
+      - "privacy-policy.md"
   workflow_dispatch:
 
 permissions:
@@ -15,6 +16,7 @@ permissions:
 env:
   APP_STORE_APP_ID: "6776297028"
   APP_SUBTITLE: "Estate planning made simple"
+  PRIVACY_POLICY_URL: "https://github.com/lanray07/LegacyVault-AI/blob/main/privacy-policy.md"
   PRIMARY_CATEGORY_ID: LIFESTYLE
   SECONDARY_CATEGORY_ID: PRODUCTIVITY
   CONTENT_RIGHTS_DECLARATION: DOES_NOT_USE_THIRD_PARTY_CONTENT
@@ -113,6 +115,9 @@ jobs:
           subtitle = os.environ["APP_SUBTITLE"].strip()
           if len(subtitle) > 30:
               raise RuntimeError("APP_SUBTITLE must be 30 characters or fewer.")
+          privacy_policy_url = os.environ["PRIVACY_POLICY_URL"].strip()
+          if not privacy_policy_url.startswith("https://"):
+              raise RuntimeError("PRIVACY_POLICY_URL must be an https URL.")
 
           app = patch_resource(
               "apps",
@@ -185,11 +190,18 @@ jobs:
           updated_localization = patch_resource(
               "appInfoLocalizations",
               localization_id,
-              attributes={"subtitle": subtitle},
+              attributes={
+                  "subtitle": subtitle,
+                  "privacyPolicyUrl": privacy_policy_url,
+              },
           )
           print(
               "Subtitle:",
               updated_localization["data"]["attributes"].get("subtitle"),
               f"({locale})",
           )
+          updated_url = updated_localization["data"]["attributes"].get("privacyPolicyUrl")
+          print("Privacy policy URL:", updated_url)
+          if updated_url != privacy_policy_url:
+              raise RuntimeError("Privacy policy URL update did not round-trip.")
           PY
