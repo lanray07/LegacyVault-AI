@@ -28,6 +28,8 @@
 	<string>LegacyVault AI may use camera access for future secure document capture placeholders.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>LegacyVault AI uses Face ID to protect your secure vault records.</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>LegacyVault AI records voice legacy messages and executor context.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

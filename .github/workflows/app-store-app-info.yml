@@ -1,0 +1,195 @@
+name: App Store App Information
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/app-store-app-info.yml"
+      - "LegacyVaultAI/Resources/Info.plist"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_STORE_APP_ID: "6776297028"
+  APP_SUBTITLE: "Estate planning made simple"
+  PRIMARY_CATEGORY_ID: LIFESTYLE
+  SECONDARY_CATEGORY_ID: PRODUCTIVITY
+  CONTENT_RIGHTS_DECLARATION: DOES_NOT_USE_THIRD_PARTY_CONTENT
+
+jobs:
+  update-app-information:
+    name: Update App Store Connect app information
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID || secrets.APP_STORE_CONNECT_API_KEY_ID || secrets.APP_STORE_CONNECT_KEY_ID || secrets.APPSTORE_API_KEY_ID }}
+      ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID || secrets.APP_STORE_CONNECT_API_ISSUER_ID || secrets.APP_STORE_CONNECT_ISSUER_ID || secrets.APPSTORE_ISSUER_ID }}
+      ASC_API_PRIVATE_KEY: ${{ secrets.ASC_API_PRIVATE_KEY || secrets.APP_STORE_CONNECT_API_PRIVATE_KEY || secrets.APP_STORE_CONNECT_PRIVATE_KEY || secrets.APPSTORE_API_PRIVATE_KEY }}
+      ASC_API_PRIVATE_KEY_BASE64: ${{ secrets.ASC_API_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_API_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_API_KEY_BASE64 || secrets.APPSTORE_API_PRIVATE_KEY_BASE64 }}
+
+    steps:
+      - name: Install API client dependencies
+        run: python3 -m pip install --quiet pyjwt cryptography requests
+
+      - name: Update App Information fields
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64
+          import json
+          import os
+          import time
+
+          import jwt
+          import requests
+
+          key_id = os.environ["ASC_API_KEY_ID"].strip()
+          issuer_id = os.environ["ASC_API_ISSUER_ID"].strip()
+          private_key = os.environ.get("ASC_API_PRIVATE_KEY", "").strip()
+          private_key_base64 = os.environ.get("ASC_API_PRIVATE_KEY_BASE64", "").strip()
+          app_id = os.environ["APP_STORE_APP_ID"].strip()
+
+          if not key_id or not issuer_id:
+              raise RuntimeError("ASC_API_KEY_ID and ASC_API_ISSUER_ID are required.")
+          if private_key_base64:
+              private_key = base64.b64decode(private_key_base64).decode("utf-8")
+          elif private_key and "BEGIN PRIVATE KEY" not in private_key:
+              decoded = base64.b64decode(private_key).decode("utf-8")
+              if "BEGIN PRIVATE KEY" in decoded:
+                  private_key = decoded
+          if "BEGIN PRIVATE KEY" not in private_key:
+              raise RuntimeError("ASC_API_PRIVATE_KEY or ASC_API_PRIVATE_KEY_BASE64 is required.")
+
+          now = int(time.time())
+          token = jwt.encode(
+              {
+                  "iss": issuer_id,
+                  "iat": now - 60,
+                  "exp": now + 20 * 60,
+                  "aud": "appstoreconnect-v1",
+              },
+              private_key,
+              algorithm="ES256",
+              headers={"kid": key_id, "typ": "JWT"},
+          )
+
+          session = requests.Session()
+          session.headers.update(
+              {
+                  "Authorization": f"Bearer {token}",
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+              }
+          )
+          base_url = "https://api.appstoreconnect.apple.com/v1"
+
+          def request(method, path, payload=None, params=None):
+              response = session.request(
+                  method,
+                  f"{base_url}{path}",
+                  params=params,
+                  data=None if payload is None else json.dumps(payload),
+                  timeout=45,
+              )
+              if response.status_code >= 400:
+                  print(response.text)
+                  response.raise_for_status()
+              if not response.text:
+                  return {}
+              return response.json()
+
+          def patch_resource(resource_type, resource_id, attributes=None, relationships=None):
+              data = {"type": resource_type, "id": resource_id}
+              if attributes:
+                  data["attributes"] = attributes
+              if relationships:
+                  data["relationships"] = relationships
+              return request("PATCH", f"/{resource_type}/{resource_id}", {"data": data})
+
+          subtitle = os.environ["APP_SUBTITLE"].strip()
+          if len(subtitle) > 30:
+              raise RuntimeError("APP_SUBTITLE must be 30 characters or fewer.")
+
+          app = patch_resource(
+              "apps",
+              app_id,
+              attributes={
+                  "contentRightsDeclaration": os.environ["CONTENT_RIGHTS_DECLARATION"],
+              },
+          )
+          print(
+              "Content rights declaration:",
+              app["data"]["attributes"].get("contentRightsDeclaration"),
+          )
+
+          app_infos_payload = request(
+              "GET",
+              f"/apps/{app_id}/appInfos",
+              params={
+                  "include": "appInfoLocalizations,primaryCategory,secondaryCategory",
+                  "limit": "10",
+              },
+          )
+          app_infos = app_infos_payload.get("data", [])
+          if not app_infos:
+              raise RuntimeError("No appInfos were returned for the app.")
+          app_info = app_infos[0]
+          app_info_id = app_info["id"]
+
+          relationships = {
+              "primaryCategory": {
+                  "data": {
+                      "type": "appCategories",
+                      "id": os.environ["PRIMARY_CATEGORY_ID"],
+                  }
+              },
+              "secondaryCategory": {
+                  "data": {
+                      "type": "appCategories",
+                      "id": os.environ["SECONDARY_CATEGORY_ID"],
+                  }
+              },
+          }
+          patch_resource("appInfos", app_info_id, relationships=relationships)
+          print(
+              "Categories:",
+              os.environ["PRIMARY_CATEGORY_ID"],
+              "/",
+              os.environ["SECONDARY_CATEGORY_ID"],
+          )
+
+          localizations = [
+              item
+              for item in app_infos_payload.get("included", [])
+              if item.get("type") == "appInfoLocalizations"
+          ]
+          if not localizations:
+              raise RuntimeError("No appInfoLocalizations were returned for the app.")
+
+          preferred_locales = ("en-GB", "en-US")
+          localization = next(
+              (
+                  item
+                  for locale in preferred_locales
+                  for item in localizations
+                  if item.get("attributes", {}).get("locale") == locale
+              ),
+              localizations[0],
+          )
+          localization_id = localization["id"]
+          locale = localization.get("attributes", {}).get("locale", "unknown")
+          updated_localization = patch_resource(
+              "appInfoLocalizations",
+              localization_id,
+              attributes={"subtitle": subtitle},
+          )
+          print(
+              "Subtitle:",
+              updated_localization["data"]["attributes"].get("subtitle"),
+              f"({locale})",
+          )
+          PY
