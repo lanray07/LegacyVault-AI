@@ -41,7 +41,7 @@ struct DashboardView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Family readiness overview")
                         .font(.title2.weight(.semibold))
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text("Your vault combines estate organization, family legacy notes, digital asset coverage, and review reminders.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -86,7 +86,7 @@ struct DashboardView: View {
         PremiumCard {
             Label("AI Recommendations", systemImage: "sparkles")
                 .font(.headline)
-                .foregroundStyle(.legacyIvory)
+                .foregroundStyle(Color.legacyIvory)
             ForEach(viewModel.roadmap, id: \.self) { step in
                 Label(step, systemImage: "arrow.up.forward.circle")
                     .font(.subheadline)
@@ -121,7 +121,7 @@ struct DashboardView: View {
                     .foregroundStyle(LegacyTheme.gold)
                 Text(title)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.legacyIvory)
+                    .foregroundStyle(Color.legacyIvory)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
                 Spacer()

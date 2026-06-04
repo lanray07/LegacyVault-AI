@@ -37,7 +37,7 @@ struct ExecutorDashboardView: View {
                         PremiumCard {
                             Label(executor.name.isEmpty ? "Executor" : executor.name, systemImage: executor.isPrimary ? "star.circle.fill" : "person.circle")
                                 .font(.headline)
-                                .foregroundStyle(.legacyIvory)
+                                .foregroundStyle(Color.legacyIvory)
                             Text(executor.contactInfo.isEmpty ? "Contact information not added" : executor.contactInfo)
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
@@ -142,7 +142,7 @@ struct GuardianPlanningView: View {
                         PremiumCard {
                             Label(guardian.guardianName.isEmpty ? "Guardian preference" : guardian.guardianName, systemImage: "heart.text.square")
                                 .font(.headline)
-                                .foregroundStyle(.legacyIvory)
+                                .foregroundStyle(Color.legacyIvory)
                             Text("Backup: \(guardian.backupGuardianName.isEmpty ? "Not added" : guardian.backupGuardianName)")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
@@ -387,7 +387,7 @@ struct LegacyTimelineView: View {
                         PremiumCard {
                             Text(event.title.isEmpty ? "Life event" : event.title)
                                 .font(.headline)
-                                .foregroundStyle(.legacyIvory)
+                                .foregroundStyle(Color.legacyIvory)
                             Text(event.eventDate.formatted(date: .abbreviated, time: .omitted))
                                 .font(.caption)
                                 .foregroundStyle(LegacyTheme.paleGold)

@@ -63,7 +63,7 @@ struct ReadinessScoreRing: View {
             VStack(spacing: 4) {
                 Text("\(score)%")
                     .font(.system(size: 38, weight: .bold, design: .serif))
-                    .foregroundStyle(.legacyIvory)
+                    .foregroundStyle(Color.legacyIvory)
                 Text(label)
                     .font(.caption)
                     .multilineTextAlignment(.center)
@@ -89,7 +89,7 @@ struct AssetCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(asset.title.isEmpty ? asset.assetType : asset.title)
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(asset.assetType)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -135,7 +135,7 @@ struct BeneficiaryCard: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(beneficiary.name.isEmpty ? "Unnamed beneficiary" : beneficiary.name)
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(beneficiary.relationship.isEmpty ? "Relationship not set" : beneficiary.relationship)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -172,7 +172,7 @@ struct VaultCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -216,7 +216,7 @@ struct EstateReviewCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(title)
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(summary)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -243,7 +243,7 @@ struct AnalyticsChartCard: View {
         PremiumCard {
             Label("Estate Analytics", systemImage: "chart.bar.xaxis")
                 .font(.headline)
-                .foregroundStyle(.legacyIvory)
+                .foregroundStyle(Color.legacyIvory)
             Chart(metrics) { metric in
                 BarMark(
                     x: .value("Area", metric.title),
@@ -292,7 +292,7 @@ struct ReportPreviewView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Estate Review Report")
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text("Summary, asset inventory, beneficiary overview, readiness report, and legacy notes.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -337,7 +337,7 @@ struct UpgradeBanner: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(plan == "Free" ? "Unlock Premium Planning" : "\(plan) active")
                         .font(.headline)
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(plan == "Free" ? "Voice recordings, PDF reports, AI reviews, and unlimited records." : "Your subscription features are enabled.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -366,7 +366,7 @@ struct EmptyStateView: View {
                 .foregroundStyle(LegacyTheme.gold)
             Text(title)
                 .font(.headline)
-                .foregroundStyle(.legacyIvory)
+                .foregroundStyle(Color.legacyIvory)
             Text(message)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
@@ -416,7 +416,7 @@ struct SectionHeader: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.title3.weight(.semibold))
-                .foregroundStyle(.legacyIvory)
+                .foregroundStyle(Color.legacyIvory)
             if let subtitle {
                 Text(subtitle)
                     .font(.subheadline)
@@ -442,7 +442,7 @@ struct SecondaryPremiumButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.headline)
-            .foregroundStyle(.legacyIvory)
+            .foregroundStyle(Color.legacyIvory)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 13)
             .background(LegacyTheme.charcoal.opacity(configuration.isPressed ? 0.85 : 0.6), in: RoundedRectangle(cornerRadius: 8))

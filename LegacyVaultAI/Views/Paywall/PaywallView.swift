@@ -59,7 +59,7 @@ struct PaywallView: View {
                                 }
                             }
                             .buttonStyle(.plain)
-                            .foregroundStyle(.legacyIvory)
+                            .foregroundStyle(Color.legacyIvory)
                         }
                     }
                 }
@@ -81,7 +81,7 @@ struct PaywallView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(plan.name)
                         .font(.title3.weight(.semibold))
-                        .foregroundStyle(.legacyIvory)
+                        .foregroundStyle(Color.legacyIvory)
                     Text(plan.subtitle)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)

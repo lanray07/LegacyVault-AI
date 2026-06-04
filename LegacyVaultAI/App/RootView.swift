@@ -111,7 +111,7 @@ struct AppShellView: View {
             .tabItem { Label(AppTab.settings.title, systemImage: AppTab.settings.symbol) }
             .tag(AppTab.settings)
         }
-        .tint(.legacyGold)
+        .tint(Color.legacyGold)
     }
 
     private func tabNavigation<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {

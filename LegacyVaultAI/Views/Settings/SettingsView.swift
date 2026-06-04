@@ -162,7 +162,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
-                    .foregroundStyle(.legacyIvory)
+                    .foregroundStyle(Color.legacyIvory)
                 Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(.secondary)

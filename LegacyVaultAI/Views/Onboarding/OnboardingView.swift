@@ -21,14 +21,14 @@ struct OnboardingView: View {
             .navigationTitle("LegacyVault AI")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .tint(.legacyGold)
+        .tint(Color.legacyGold)
     }
 
     private var hero: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Protect your family. Preserve your legacy.")
                 .font(.system(size: 34, weight: .bold, design: .serif))
-                .foregroundStyle(.legacyIvory)
+                .foregroundStyle(Color.legacyIvory)
                 .fixedSize(horizontal: false, vertical: true)
             Text("If something happened tomorrow, would your family know what to do?")
                 .font(.title3.weight(.medium))
@@ -42,7 +42,7 @@ struct OnboardingView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Private family office planning")
                             .font(.headline)
-                            .foregroundStyle(.legacyIvory)
+                            .foregroundStyle(Color.legacyIvory)
                         Text("Organize wishes, people, documents, and assets in one secure estate profile.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
