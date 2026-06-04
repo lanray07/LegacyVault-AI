@@ -247,9 +247,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build
-          SIGNING_ARGS=(CODE_SIGN_STYLE=Automatic)
+          PROVISIONING_ARGS=()
           if [ -n "${PROFILE_NAME:-}" ]; then
             SIGNING_ARGS=(CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER="$PROFILE_NAME")
+            PROVISIONING_ARGS=(-allowProvisioningUpdates -authenticationKeyPath "$ASC_API_KEY_PATH" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID")
+          else
+            SIGNING_ARGS=(CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="")
           fi
 
           xcodebuild archive \
@@ -258,10 +261,7 @@ jobs:
             -configuration "$CONFIGURATION" \
             -destination "generic/platform=iOS" \
             -archivePath "$ARCHIVE_PATH" \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath "$ASC_API_KEY_PATH" \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            "${PROVISIONING_ARGS[@]}" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_IDENTIFIER" \
             MARKETING_VERSION="$MARKETING_VERSION" \
