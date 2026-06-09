@@ -227,11 +227,17 @@ def create_screenshot_set(localization_id: str, display_type: str) -> str:
     existing = request(
         "GET",
         f"/appStoreVersionLocalizations/{localization_id}/appScreenshotSets",
-        params={"filter[screenshotDisplayType]": display_type, "limit": "200"},
+        params={"limit": "200"},
     ).get("data", [])
     for screenshot_set in existing:
-        delete(f"/appScreenshotSets/{screenshot_set['id']}")
-        print(f"Deleted existing screenshot set {screenshot_set['id']} ({display_type}).")
+        attrs = screenshot_set.get("attributes", {})
+        screenshot_display_type = attrs.get("screenshotDisplayType")
+        if not screenshot_display_type:
+            screenshot_set = request("GET", f"/appScreenshotSets/{screenshot_set['id']}")["data"]
+            screenshot_display_type = screenshot_set.get("attributes", {}).get("screenshotDisplayType")
+        if screenshot_display_type == display_type:
+            delete(f"/appScreenshotSets/{screenshot_set['id']}")
+            print(f"Deleted existing screenshot set {screenshot_set['id']} ({display_type}).")
     payload = request(
         "POST",
         "/appScreenshotSets",
@@ -289,26 +295,39 @@ def upload_app_screenshot_sets(localization_id: str) -> None:
         print(f"Uploaded {len(screenshot_ids)} screenshots for {display_type}.")
 
 
-def in_app_purchase_id(product_id: str) -> str:
-    payload = request(
-        "GET",
-        f"/apps/{APP_ID}/inAppPurchasesV2",
-        params={"filter[productId]": product_id, "limit": "10"},
-    )
-    purchases = payload.get("data", [])
-    if purchases:
-        return purchases[0]["id"]
+def all_subscriptions() -> list[dict]:
+    groups = request("GET", f"/apps/{APP_ID}/subscriptionGroups", params={"limit": "200"}).get("data", [])
+    if not groups:
+        raise RuntimeError("No subscription groups were returned for the app.")
 
-    all_purchases = request("GET", f"/apps/{APP_ID}/inAppPurchasesV2", params={"limit": "200"}).get("data", [])
-    if not all_purchases:
-        raise RuntimeError("No in-app purchases were returned for the app.")
+    subscriptions: list[dict] = []
+    for group in groups:
+        subscriptions.extend(
+            request(
+                "GET",
+                f"/subscriptionGroups/{group['id']}/subscriptions",
+                params={"limit": "200"},
+            ).get("data", [])
+        )
+    return subscriptions
 
-    print("Available in-app purchases:")
-    for purchase in all_purchases:
-        attrs = purchase.get("attributes", {})
+
+def subscription_id(product_id: str) -> str:
+    all_products = all_subscriptions()
+    exact = [
+        product
+        for product in all_products
+        if product.get("attributes", {}).get("productId") == product_id
+    ]
+    if exact:
+        return exact[0]["id"]
+
+    print("Available subscriptions:")
+    for product in all_products:
+        attrs = product.get("attributes", {})
         print(
             "-",
-            purchase["id"],
+            product["id"],
             attrs.get("productId"),
             attrs.get("name") or attrs.get("referenceName"),
         )
@@ -316,18 +335,18 @@ def in_app_purchase_id(product_id: str) -> str:
     target_tokens = product_id.replace("familyoffice", "family.office").replace("_", ".").split(".")
     target_tokens = [token for token in target_tokens if token not in {"com", "legacyvaultai"}]
 
-    def score(purchase: dict) -> int:
-        attrs = purchase.get("attributes", {})
+    def score(product: dict) -> int:
+        attrs = product.get("attributes", {})
         haystack = " ".join(
             str(attrs.get(field, ""))
             for field in ("productId", "name", "referenceName")
         ).lower().replace("_", " ").replace("-", " ").replace(".", " ")
         return sum(1 for token in target_tokens if token.lower() in haystack)
 
-    best = max(all_purchases, key=score)
+    best = max(all_products, key=score)
     best_score = score(best)
     if best_score < 2:
-        raise RuntimeError(f"No in-app purchase found for {product_id}.")
+        raise RuntimeError(f"No subscription found for {product_id}.")
 
     attrs = best.get("attributes", {})
     print(
@@ -337,15 +356,15 @@ def in_app_purchase_id(product_id: str) -> str:
     return best["id"]
 
 
-def clear_iap_images(iap_id: str) -> None:
-    images = request("GET", f"/inAppPurchases/{iap_id}/images", params={"limit": "200"}).get("data", [])
+def clear_subscription_images(subscription_id_value: str) -> None:
+    images = request("GET", f"/subscriptions/{subscription_id_value}/images", params={"limit": "200"}).get("data", [])
     for image in images:
-        delete(f"/inAppPurchaseImages/{image['id']}")
-        print(f"Deleted existing promotional image {image['id']}.")
+        delete(f"/subscriptionImages/{image['id']}")
+        print(f"Deleted existing subscription image {image['id']}.")
 
 
-def clear_iap_review_screenshot(iap_id: str) -> None:
-    response = SESSION.get(f"{BASE_URL}/inAppPurchases/{iap_id}/relationships/appStoreReviewScreenshot", timeout=60)
+def clear_subscription_review_screenshot(subscription_id_value: str) -> None:
+    response = SESSION.get(f"{BASE_URL}/subscriptions/{subscription_id_value}/appStoreReviewScreenshot", timeout=60)
     if response.status_code == 404:
         return
     if response.status_code >= 400:
@@ -353,42 +372,42 @@ def clear_iap_review_screenshot(iap_id: str) -> None:
         response.raise_for_status()
     data = response.json().get("data")
     if data and data.get("id"):
-        delete(f"/inAppPurchaseAppStoreReviewScreenshots/{data['id']}")
+        delete(f"/subscriptionAppStoreReviewScreenshots/{data['id']}")
         print(f"Deleted existing review screenshot {data['id']}.")
 
 
-def upload_iap_image(iap_id: str, path: Path) -> str:
+def upload_subscription_image(subscription_id_value: str, path: Path) -> str:
     payload = request(
         "POST",
-        "/inAppPurchaseImages",
+        "/subscriptionImages",
         {
             "data": {
-                "type": "inAppPurchaseImages",
+                "type": "subscriptionImages",
                 "attributes": {"fileSize": path.stat().st_size, "fileName": path.name},
                 "relationships": {
-                    "inAppPurchase": {
-                        "data": {"type": "inAppPurchases", "id": iap_id}
+                    "subscription": {
+                        "data": {"type": "subscriptions", "id": subscription_id_value}
                     }
                 },
             }
         },
     )
     image_id = payload["data"]["id"]
-    upload_reserved_asset("inAppPurchaseImages", image_id, payload["data"]["attributes"], path)
+    upload_reserved_asset("subscriptionImages", image_id, payload["data"]["attributes"], path)
     return image_id
 
 
-def upload_iap_review_screenshot(iap_id: str, path: Path) -> str:
+def upload_subscription_review_screenshot(subscription_id_value: str, path: Path) -> str:
     payload = request(
         "POST",
-        "/inAppPurchaseAppStoreReviewScreenshots",
+        "/subscriptionAppStoreReviewScreenshots",
         {
             "data": {
-                "type": "inAppPurchaseAppStoreReviewScreenshots",
+                "type": "subscriptionAppStoreReviewScreenshots",
                 "attributes": {"fileSize": path.stat().st_size, "fileName": path.name},
                 "relationships": {
-                    "inAppPurchaseV2": {
-                        "data": {"type": "inAppPurchases", "id": iap_id}
+                    "subscription": {
+                        "data": {"type": "subscriptions", "id": subscription_id_value}
                     }
                 },
             }
@@ -396,7 +415,7 @@ def upload_iap_review_screenshot(iap_id: str, path: Path) -> str:
     )
     screenshot_id = payload["data"]["id"]
     upload_reserved_asset(
-        "inAppPurchaseAppStoreReviewScreenshots",
+        "subscriptionAppStoreReviewScreenshots",
         screenshot_id,
         payload["data"]["attributes"],
         path,
@@ -406,12 +425,12 @@ def upload_iap_review_screenshot(iap_id: str, path: Path) -> str:
 
 def upload_subscription_assets() -> None:
     for product_id, paths in SUBSCRIPTION_ASSETS.items():
-        iap_id = in_app_purchase_id(product_id)
-        print(f"Uploading subscription assets for {product_id} ({iap_id}).")
-        clear_iap_images(iap_id)
-        upload_iap_image(iap_id, paths["promo"])
-        clear_iap_review_screenshot(iap_id)
-        upload_iap_review_screenshot(iap_id, paths["review"])
+        subscription_id_value = subscription_id(product_id)
+        print(f"Uploading subscription assets for {product_id} ({subscription_id_value}).")
+        clear_subscription_images(subscription_id_value)
+        upload_subscription_image(subscription_id_value, paths["promo"])
+        clear_subscription_review_screenshot(subscription_id_value)
+        upload_subscription_review_screenshot(subscription_id_value, paths["review"])
 
 
 def main() -> None:
