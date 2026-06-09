@@ -1,6 +1,11 @@
 import Foundation
 import SwiftData
 
+enum LegalLinks {
+    static let privacyPolicy = URL(string: "https://github.com/lanray07/LegacyVault-AI/blob/main/privacy-policy.md")!
+    static let termsOfUse = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!
+}
+
 enum LegalDisclaimer {
     static let short = "Educational tool only. Not legal advice. Laws vary by jurisdiction and qualified legal review is recommended."
 

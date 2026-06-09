@@ -134,7 +134,17 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
             Divider().overlay(LegacyTheme.gold.opacity(0.25))
-            Text("Privacy policy and terms of use screens are ready for production legal copy.")
+            Link(destination: LegalLinks.privacyPolicy) {
+                Label("Privacy Policy", systemImage: "hand.raised")
+            }
+            .foregroundStyle(Color.legacyIvory)
+
+            Link(destination: LegalLinks.termsOfUse) {
+                Label("Terms of Use (EULA)", systemImage: "doc.text")
+            }
+            .foregroundStyle(Color.legacyIvory)
+
+            Text("Privacy policy and Apple standard Terms of Use links open from the app.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

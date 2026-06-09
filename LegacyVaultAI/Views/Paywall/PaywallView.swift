@@ -7,23 +7,44 @@ struct PaywallView: View {
     @EnvironmentObject private var subscriptionService: SubscriptionService
     @Query(sort: \SubscriptionState.createdAt, order: .reverse) private var storedStates: [SubscriptionState]
 
+    @State private var purchasingProductID: String?
+    @State private var isRestoring = false
+
     private let plans = [
         PaywallPlan(
             name: "Free",
-            price: "£0",
-            subtitle: "Basic estate checklist and limited records",
+            entitlementName: "Free",
+            productID: nil,
+            fallbackPrice: "Free",
+            duration: "No subscription",
+            subtitle: "Basic estate checklist and limited records.",
             features: ["Limited assets", "Basic estate checklist", "Limited vault storage"]
         ),
         PaywallPlan(
-            name: "Premium",
-            price: "£9.99 / month",
-            subtitle: "Unlimited organization and premium planning tools",
+            name: "Premium Monthly",
+            entitlementName: "Premium",
+            productID: SubscriptionService.premiumMonthlyID,
+            fallbackPrice: "Monthly subscription",
+            duration: "Renews monthly",
+            subtitle: "Unlimited organization and premium planning tools.",
             features: ["Unlimited assets", "Voice legacy recordings", "Estate readiness engine", "PDF reports", "AI assistant"]
         ),
         PaywallPlan(
-            name: "Family Office",
-            price: "£24.99 / month",
-            subtitle: "Advanced family legacy tools",
+            name: "Premium Yearly",
+            entitlementName: "Premium",
+            productID: SubscriptionService.premiumYearlyID,
+            fallbackPrice: "Annual subscription",
+            duration: "Renews yearly",
+            subtitle: "A full year of premium planning for organized family records.",
+            features: ["Unlimited assets", "Voice legacy recordings", "Estate readiness engine", "PDF reports", "AI assistant"]
+        ),
+        PaywallPlan(
+            name: "Family Office Monthly",
+            entitlementName: "Family Office",
+            productID: SubscriptionService.familyOfficeMonthlyID,
+            fallbackPrice: "Monthly subscription",
+            duration: "Renews monthly",
+            subtitle: "Advanced family legacy tools and shared planning placeholders.",
             features: ["Multiple family members", "Shared vault placeholder", "Advanced reports", "Premium legacy tools"]
         )
     ]
@@ -42,41 +63,34 @@ struct PaywallView: View {
                     planCard(plan)
                 }
 
-                if subscriptionService.products.isEmpty == false {
-                    PremiumCard {
-                        SectionHeader(title: "StoreKit Products", subtitle: "Loaded from StoreKit 2.")
-                        ForEach(subscriptionService.products, id: \.id) { product in
-                            Button {
-                                Task {
-                                    try? await subscriptionService.purchase(product)
-                                    syncStoredPlan(subscriptionService.displayState.plan, active: subscriptionService.displayState.isActive)
-                                }
-                            } label: {
-                                HStack {
-                                    Text(product.displayName)
-                                    Spacer()
-                                    Text(product.displayPrice)
-                                }
-                            }
-                            .buttonStyle(.plain)
-                            .foregroundStyle(Color.legacyIvory)
-                        }
-                    }
-                }
+                managePurchasesCard
 
                 if let loadingError = subscriptionService.loadingError {
                     ErrorStateView(message: loadingError)
                 }
 
+                legalLinksCard
                 LegalDisclaimerBanner(compact: true)
             }
             .padding(18)
         }
         .premiumScreenBackground()
+        .task {
+            if subscriptionService.products.isEmpty {
+                await subscriptionService.loadProducts()
+            }
+            await subscriptionService.refreshEntitlements()
+            syncStoredPlan(subscriptionService.displayState.plan, active: subscriptionService.displayState.isActive)
+        }
     }
 
     private func planCard(_ plan: PaywallPlan) -> some View {
-        PremiumCard {
+        let product = product(for: plan)
+        let isSelected = subscriptionService.displayState.isActive
+            ? plan.entitlementName == subscriptionService.displayState.plan
+            : plan.productID == nil
+
+        return PremiumCard {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(plan.name)
@@ -87,9 +101,14 @@ struct PaywallView: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                Text(plan.price)
-                    .font(.headline)
-                    .foregroundStyle(LegacyTheme.paleGold)
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(product?.displayPrice ?? plan.fallbackPrice)
+                        .font(.headline)
+                        .foregroundStyle(LegacyTheme.paleGold)
+                    Text(plan.duration)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
 
             ForEach(plan.features, id: \.self) { feature in
@@ -98,29 +117,114 @@ struct PaywallView: View {
                     .foregroundStyle(.secondary)
             }
 
-            planActionButton(plan)
+            planActionButton(plan, product: product, isSelected: isSelected)
+        }
+    }
+
+    private var managePurchasesCard: some View {
+        PremiumCard {
+            SectionHeader(title: "Manage Purchases", subtitle: "Purchases are processed securely through your Apple ID.")
+
+            if let statusMessage = subscriptionService.statusMessage {
+                Label(statusMessage, systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            Button {
+                restorePurchases()
+            } label: {
+                if isRestoring {
+                    Label("Restoring Purchases", systemImage: "arrow.triangle.2.circlepath")
+                } else {
+                    Label("Restore Purchases", systemImage: "arrow.clockwise.circle")
+                }
+            }
+            .buttonStyle(SecondaryPremiumButtonStyle())
+            .disabled(isRestoring || purchasingProductID != nil)
+        }
+    }
+
+    private var legalLinksCard: some View {
+        PremiumCard {
+            SectionHeader(title: "Subscription Terms", subtitle: "Required policy links for auto-renewable subscriptions.")
+            Link(destination: LegalLinks.privacyPolicy) {
+                Label("Privacy Policy", systemImage: "hand.raised")
+            }
+            .foregroundStyle(Color.legacyIvory)
+
+            Link(destination: LegalLinks.termsOfUse) {
+                Label("Terms of Use (EULA)", systemImage: "doc.text")
+            }
+            .foregroundStyle(Color.legacyIvory)
+
+            Text("Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period. Manage or cancel subscriptions in your Apple ID settings.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
     @ViewBuilder
-    private func planActionButton(_ plan: PaywallPlan) -> some View {
-        let isSelected = plan.name == subscriptionService.displayState.plan
+    private func planActionButton(_ plan: PaywallPlan, product: Product?, isSelected: Bool) -> some View {
         if isSelected {
-            Button {
-                subscriptionService.activateMockPlan(plan.name)
-                syncStoredPlan(plan.name, active: plan.name != "Free")
-            } label: {
+            Button {} label: {
                 Label("Selected", systemImage: "checkmark.seal.fill")
             }
             .buttonStyle(SecondaryPremiumButtonStyle())
-        } else {
+            .disabled(true)
+        } else if plan.productID == nil {
             Button {
-                subscriptionService.activateMockPlan(plan.name)
-                syncStoredPlan(plan.name, active: plan.name != "Free")
+                subscriptionService.activateMockPlan("Free")
+                syncStoredPlan("Free", active: false)
             } label: {
-                Label("Choose \(plan.name)", systemImage: "crown")
+                Label("Use Free Plan", systemImage: "checkmark.circle")
+            }
+            .buttonStyle(SecondaryPremiumButtonStyle())
+            .disabled(purchasingProductID != nil || isRestoring)
+        } else if let product {
+            Button {
+                purchase(product)
+            } label: {
+                if purchasingProductID == product.id {
+                    Label("Opening Purchase", systemImage: "hourglass")
+                } else {
+                    Label("Purchase \(plan.name)", systemImage: "crown")
+                }
             }
             .buttonStyle(PremiumButtonStyle())
+            .disabled(purchasingProductID != nil || isRestoring)
+        } else {
+            Label("Subscription unavailable", systemImage: "wifi.exclamationmark")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private func product(for plan: PaywallPlan) -> Product? {
+        guard let productID = plan.productID else { return nil }
+        return subscriptionService.products.first { $0.id == productID }
+    }
+
+    private func purchase(_ product: Product) {
+        purchasingProductID = product.id
+        Task {
+            defer { purchasingProductID = nil }
+            do {
+                try await subscriptionService.purchase(product)
+                syncStoredPlan(subscriptionService.displayState.plan, active: subscriptionService.displayState.isActive)
+            } catch {
+                subscriptionService.loadingError = "Unable to complete purchase. Please try again."
+                subscriptionService.statusMessage = nil
+            }
+        }
+    }
+
+    private func restorePurchases() {
+        isRestoring = true
+        Task {
+            defer { isRestoring = false }
+            await subscriptionService.restorePurchases()
+            syncStoredPlan(subscriptionService.displayState.plan, active: subscriptionService.displayState.isActive)
         }
     }
 
@@ -139,7 +243,10 @@ struct PaywallView: View {
 private struct PaywallPlan: Identifiable {
     let id = UUID()
     var name: String
-    var price: String
+    var entitlementName: String
+    var productID: String?
+    var fallbackPrice: String
+    var duration: String
     var subtitle: String
     var features: [String]
 }

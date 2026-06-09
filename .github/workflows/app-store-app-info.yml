@@ -7,6 +7,7 @@ on:
     paths:
       - ".github/workflows/app-store-app-info.yml"
       - "LegacyVaultAI/Resources/Info.plist"
+      - "LegacyVaultAI/Models/LegacyModels.swift"
       - "privacy-policy.md"
   workflow_dispatch:
 
@@ -17,6 +18,14 @@ env:
   APP_STORE_APP_ID: "6776297028"
   APP_SUBTITLE: "Estate planning made simple"
   PRIVACY_POLICY_URL: "https://github.com/lanray07/LegacyVault-AI/blob/main/privacy-policy.md"
+  TERMS_OF_USE_URL: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+  APP_DESCRIPTION: |
+    LegacyVault AI helps families organize estate-planning information, legacy records, voice notes, document locations, beneficiaries, guardians, executors, and review-ready summaries in one clear workspace.
+
+    Use LegacyVault AI to capture asset details, preserve family wishes, track document readiness, and export practical summaries for adviser and family conversations. LegacyVault AI is an educational organization tool and does not provide legal advice or create legally binding documents.
+
+    Privacy Policy: https://github.com/lanray07/LegacyVault-AI/blob/main/privacy-policy.md
+    Terms of Use (EULA): https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
   PRIMARY_CATEGORY_ID: LIFESTYLE
   SECONDARY_CATEGORY_ID: PRODUCTIVITY
   CONTENT_RIGHTS_DECLARATION: DOES_NOT_USE_THIRD_PARTY_CONTENT
@@ -118,6 +127,14 @@ jobs:
           privacy_policy_url = os.environ["PRIVACY_POLICY_URL"].strip()
           if not privacy_policy_url.startswith("https://"):
               raise RuntimeError("PRIVACY_POLICY_URL must be an https URL.")
+          terms_of_use_url = os.environ["TERMS_OF_USE_URL"].strip()
+          if not terms_of_use_url.startswith("https://"):
+              raise RuntimeError("TERMS_OF_USE_URL must be an https URL.")
+          app_description = os.environ["APP_DESCRIPTION"].strip()
+          if terms_of_use_url not in app_description:
+              raise RuntimeError("APP_DESCRIPTION must include TERMS_OF_USE_URL.")
+          if privacy_policy_url not in app_description:
+              raise RuntimeError("APP_DESCRIPTION must include PRIVACY_POLICY_URL.")
 
           app = patch_resource(
               "apps",
@@ -204,4 +221,53 @@ jobs:
           print("Privacy policy URL:", updated_url)
           if updated_url != privacy_policy_url:
               raise RuntimeError("Privacy policy URL update did not round-trip.")
+
+          versions_payload = request(
+              "GET",
+              f"/apps/{app_id}/appStoreVersions",
+              params={
+                  "filter[platform]": "IOS",
+                  "filter[versionString]": "1.0",
+                  "include": "appStoreVersionLocalizations",
+                  "limit": "10",
+              },
+          )
+          versions = versions_payload.get("data", [])
+          if not versions:
+              raise RuntimeError("No iOS 1.0 appStoreVersion was returned for the app.")
+
+          version_localizations = [
+              item
+              for item in versions_payload.get("included", [])
+              if item.get("type") == "appStoreVersionLocalizations"
+          ]
+          if not version_localizations:
+              version_localizations_payload = request(
+                  "GET",
+                  f"/appStoreVersions/{versions[0]['id']}/appStoreVersionLocalizations",
+                  params={"limit": "10"},
+              )
+              version_localizations = version_localizations_payload.get("data", [])
+          if not version_localizations:
+              raise RuntimeError("No appStoreVersionLocalizations were returned for iOS 1.0.")
+
+          version_localization = next(
+              (
+                  item
+                  for locale in preferred_locales
+                  for item in version_localizations
+                  if item.get("attributes", {}).get("locale") == locale
+              ),
+              version_localizations[0],
+          )
+          version_locale = version_localization.get("attributes", {}).get("locale", "unknown")
+          updated_version_localization = patch_resource(
+              "appStoreVersionLocalizations",
+              version_localization["id"],
+              attributes={"description": app_description},
+          )
+          updated_description = updated_version_localization["data"]["attributes"].get("description", "")
+          if terms_of_use_url not in updated_description:
+              raise RuntimeError("App description update did not include the Terms URL.")
+          print(f"App description updated with Terms URL ({version_locale}).")
           PY

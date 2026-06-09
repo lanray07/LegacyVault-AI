@@ -173,6 +173,7 @@ final class SubscriptionService: ObservableObject {
     @Published var products: [Product] = []
     @Published var displayState = DisplayState()
     @Published var loadingError: String?
+    @Published var statusMessage: String?
 
     private let productIDs = [
         premiumMonthlyID,
@@ -183,23 +184,33 @@ final class SubscriptionService: ObservableObject {
     func loadProducts() async {
         do {
             products = try await Product.products(for: productIDs)
+            loadingError = nil
         } catch {
-            loadingError = "StoreKit products are using local placeholders until App Store Connect is configured."
+            loadingError = "Unable to load subscription products. Please check your connection and try again."
         }
     }
 
     func purchase(_ product: Product) async throws {
+        loadingError = nil
+        statusMessage = "Opening App Store purchase sheet..."
         let result = try await product.purchase()
         switch result {
         case .success(let verification):
             if case .verified(let transaction) = verification {
                 await transaction.finish()
                 displayState = DisplayState(plan: planName(for: transaction.productID), isActive: true)
+                statusMessage = "\(displayState.plan) subscription active."
+            } else {
+                loadingError = "The purchase could not be verified. Please try again."
+                statusMessage = nil
             }
-        case .pending, .userCancelled:
-            break
+        case .pending:
+            statusMessage = "Purchase is pending approval."
+        case .userCancelled:
+            statusMessage = "Purchase cancelled."
         @unknown default:
-            break
+            loadingError = "The purchase could not be completed. Please try again."
+            statusMessage = nil
         }
     }
 
@@ -212,6 +223,19 @@ final class SubscriptionService: ObservableObject {
         }
         if displayState.isActive == false {
             displayState = DisplayState(plan: "Free", isActive: false)
+        }
+    }
+
+    func restorePurchases() async {
+        loadingError = nil
+        statusMessage = "Checking previous purchases..."
+        do {
+            try await AppStore.sync()
+            await refreshEntitlements()
+            statusMessage = displayState.isActive ? "\(displayState.plan) restored." : "No active purchases found."
+        } catch {
+            loadingError = "Unable to restore purchases. Please try again."
+            statusMessage = nil
         }
     }
 

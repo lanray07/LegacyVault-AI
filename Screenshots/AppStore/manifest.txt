@@ -1,0 +1,13 @@
+LegacyVault AI App Store screenshot package
+
+iPhone 6.5-inch screenshots: Screenshots/AppStore/iPhone_6.5_1242x2688
+iPad 13-inch screenshots: Screenshots/AppStore/iPad_13_2064x2752
+iPad 13-inch compatible alternate: Screenshots/AppStore/iPad_13_2048x2732
+Subscription App Review screenshots: Screenshots/AppStore/Subscriptions/AppReviewScreenshots_1242x2688
+Subscription promotional images: Screenshots/AppStore/Subscriptions/PromotionalImages_1024x1024
+Artificial status bar text removed from composed screenshots.
+
+StoreKit products covered:
+- com.legacyvaultai.premium.monthly: Premium Monthly
+- com.legacyvaultai.premium.yearly: Premium Yearly
+- com.legacyvaultai.familyoffice.monthly: Family Office Monthly
