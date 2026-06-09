@@ -160,11 +160,14 @@ def delivery_state(attributes: dict) -> str | None:
 def wait_for_complete(resource_type: str, resource_id: str, timeout_seconds: int = 420) -> str:
     deadline = time.time() + timeout_seconds
     last_state = "UNKNOWN"
+    accepted_states = {"COMPLETE"}
+    if resource_type in {"subscriptionImages", "subscriptionAppStoreReviewScreenshots"}:
+        accepted_states.update({"PREPARE_FOR_SUBMISSION", "READY_TO_SUBMIT", "WAITING_FOR_REVIEW"})
     while time.time() < deadline:
         payload = request("GET", f"/{resource_type}/{resource_id}")
         attrs = payload["data"].get("attributes", {})
         last_state = delivery_state(attrs) or last_state
-        if last_state == "COMPLETE":
+        if last_state in accepted_states:
             return last_state
         if last_state == "FAILED":
             raise RuntimeError(f"{resource_type} {resource_id} processing failed: {attrs}")
