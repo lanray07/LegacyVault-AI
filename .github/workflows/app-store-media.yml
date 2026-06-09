@@ -1,0 +1,41 @@
+name: App Store Media Upload
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/app-store-media.yml"
+      - "scripts/app_store_media_upload.py"
+      - "Screenshots/AppStore/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_STORE_APP_ID: "6776297028"
+  APP_VERSION: "1.0"
+  APP_LOCALES: "en-GB,en-US"
+
+jobs:
+  upload-media:
+    name: Upload screenshots and subscription images
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      ASC_API_KEY_ID: ${{ secrets.ASC_API_KEY_ID || secrets.APP_STORE_CONNECT_API_KEY_ID || secrets.APP_STORE_CONNECT_KEY_ID || secrets.APPSTORE_API_KEY_ID }}
+      ASC_API_ISSUER_ID: ${{ secrets.ASC_API_ISSUER_ID || secrets.APP_STORE_CONNECT_API_ISSUER_ID || secrets.APP_STORE_CONNECT_ISSUER_ID || secrets.APPSTORE_ISSUER_ID }}
+      ASC_API_PRIVATE_KEY: ${{ secrets.ASC_API_PRIVATE_KEY || secrets.APP_STORE_CONNECT_API_PRIVATE_KEY || secrets.APP_STORE_CONNECT_PRIVATE_KEY || secrets.APPSTORE_API_PRIVATE_KEY }}
+      ASC_API_PRIVATE_KEY_BASE64: ${{ secrets.ASC_API_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_API_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_PRIVATE_KEY_BASE64 || secrets.APP_STORE_CONNECT_API_KEY_BASE64 || secrets.APPSTORE_API_PRIVATE_KEY_BASE64 }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install API client dependencies
+        run: python3 -m pip install --quiet pyjwt cryptography requests
+
+      - name: Upload App Store media
+        run: python3 scripts/app_store_media_upload.py
