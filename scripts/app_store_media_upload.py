@@ -296,9 +296,45 @@ def in_app_purchase_id(product_id: str) -> str:
         params={"filter[productId]": product_id, "limit": "10"},
     )
     purchases = payload.get("data", [])
-    if not purchases:
+    if purchases:
+        return purchases[0]["id"]
+
+    all_purchases = request("GET", f"/apps/{APP_ID}/inAppPurchasesV2", params={"limit": "200"}).get("data", [])
+    if not all_purchases:
+        raise RuntimeError("No in-app purchases were returned for the app.")
+
+    print("Available in-app purchases:")
+    for purchase in all_purchases:
+        attrs = purchase.get("attributes", {})
+        print(
+            "-",
+            purchase["id"],
+            attrs.get("productId"),
+            attrs.get("name") or attrs.get("referenceName"),
+        )
+
+    target_tokens = product_id.replace("familyoffice", "family.office").replace("_", ".").split(".")
+    target_tokens = [token for token in target_tokens if token not in {"com", "legacyvaultai"}]
+
+    def score(purchase: dict) -> int:
+        attrs = purchase.get("attributes", {})
+        haystack = " ".join(
+            str(attrs.get(field, ""))
+            for field in ("productId", "name", "referenceName")
+        ).lower().replace("_", " ").replace("-", " ").replace(".", " ")
+        return sum(1 for token in target_tokens if token.lower() in haystack)
+
+    best = max(all_purchases, key=score)
+    best_score = score(best)
+    if best_score < 2:
         raise RuntimeError(f"No in-app purchase found for {product_id}.")
-    return purchases[0]["id"]
+
+    attrs = best.get("attributes", {})
+    print(
+        f"Matched {product_id} to {attrs.get('productId')} "
+        f"({attrs.get('name') or attrs.get('referenceName')}) by App Store Connect metadata."
+    )
+    return best["id"]
 
 
 def clear_iap_images(iap_id: str) -> None:
